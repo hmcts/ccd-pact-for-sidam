@@ -10,8 +10,8 @@ import feign.RequestLine;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "SIDAMService")
-public interface SIDAMApi {
+@FeignClient(name = "SidamService")
+public interface SidamApi {
 
     @RequestMapping(method = RequestMethod.GET, path = "/details")
     IdamUser getUser(@RequestHeader(value = "access_token") String accessToken);

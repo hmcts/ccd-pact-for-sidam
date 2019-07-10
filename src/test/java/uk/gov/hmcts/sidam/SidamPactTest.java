@@ -20,14 +20,14 @@ import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
-@PactTestFor(providerName = "SIDAMService", port = "8888")
+@PactTestFor(providerName = "SidamService", port = "8888")
 @SpringBootTest({
     // overriding provider address
-    "SIDAMService.ribbon.listOfServers: localhost:8888"
+    "SidamService.ribbon.listOfServers: localhost:8888"
 })
-public class SIDAMPACTTest {
+public class SidamPactTest {
     @Autowired
-    private SIDAMApi sidamApi;
+    private SidamApi sidamApi;
 
     @Pact(state = "get user details from idam", provider = "sidam_user_details", consumer = "ccd_data_store")
     RequestResponsePact getDetailsPact(PactDslWithProvider builder) {
@@ -90,7 +90,7 @@ public class SIDAMPACTTest {
     @Test
     @PactTestFor(pactMethod = "authorizeUser")
     void verifyAuthorizeUser() {
-        SIDAMApi.AuthenticateUserResponse user = sidamApi.authorizeUser("some-access-token",
+        SidamApi.AuthenticateUserResponse user = sidamApi.authorizeUser("some-access-token",
             null,
             "ID10001",
             null);
@@ -100,14 +100,14 @@ public class SIDAMPACTTest {
     @Test
     @PactTestFor(pactMethod = "getDetailsPact")
     void verifyIDAMUser() {
-        SIDAMApi.IdamUser user = sidamApi.getUser("some-access-token");
+        SidamApi.IdamUser user = sidamApi.getUser("some-access-token");
         assertThat(user.getId()).isEqualTo("42");
     }
 
     @Test
     @PactTestFor(pactMethod = "getToken")
     void verifyITokenEnpoint() {
-        SIDAMApi.TokenExchangeResponse token = sidamApi.token("42",
+        SidamApi.TokenExchangeResponse token = sidamApi.token("42",
             "grantType",
             "http://localhost:3501/case-management", null, null);
         assertThat(token.getAccessToken()).isEqualTo("some-access-toke");
