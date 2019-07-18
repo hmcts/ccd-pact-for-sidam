@@ -1,0 +1,87 @@
+{
+    "provider": {
+        "name": "sidam_user_details"
+    },
+    "consumer": {
+        "name": "ccd_data_store"
+    },
+    "interactions": [
+        {
+            "description": "a request for a token",
+            "request": {
+                "method": "GET",
+                "path": "/details",
+                "headers": {
+                    "access_token": "some-access-token"
+                }
+            },
+            "response": {
+                "status": 201,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "id": 42,
+                    "roles": [
+                        "SOLICITOR",
+                        "SOLICITOR"
+                    ]
+                },
+                "matchingRules": {
+                    "header": {
+                        "Content-Type": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "application/json"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "body": {
+                        "$.id": {
+                            "matchers": [
+                                {
+                                    "match": "integer"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.roles": {
+                            "matchers": [
+                                {
+                                    "match": "type",
+                                    "min": 1
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.roles[*]": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "TESTER|DEVELOPER|SOLICITOR"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "provider returns a SIDAM user"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pactSpecification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": "3.5.24"
+        }
+    }
+}

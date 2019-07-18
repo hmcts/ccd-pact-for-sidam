@@ -1,0 +1,70 @@
+{
+    "provider": {
+        "name": "sidam_authorise_user_endpoint"
+    },
+    "consumer": {
+        "name": "ccd_data_store"
+    },
+    "interactions": [
+        {
+            "description": "a request for a token",
+            "request": {
+                "method": "POST",
+                "path": "/oauth2/authorize",
+                "headers": {
+                    "Authorization": "some-access-token"
+                },
+                "query": {
+                    "client_id": [
+                        "ID10001"
+                    ]
+                }
+            },
+            "response": {
+                "status": 201,
+                "headers": {
+                    "Content-Type": "application/json; charset=UTF-8"
+                },
+                "body": {
+                    "code": "42"
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.code": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "header": {
+                        "Content-Type": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "provider returns a SIDAM user"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pactSpecification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": "3.5.24"
+        }
+    }
+}

@@ -1,0 +1,73 @@
+{
+    "provider": {
+        "name": "sidam_token"
+    },
+    "consumer": {
+        "name": "ccd_data_store"
+    },
+    "interactions": [
+        {
+            "description": "a request for a token",
+            "request": {
+                "method": "POST",
+                "path": "/oauth2/token",
+                "query": {
+                    "code": [
+                        "42"
+                    ],
+                    "grant_type": [
+                        "grantType"
+                    ],
+                    "redirect_uri": [
+                        "http://localhost:3501/case-management"
+                    ]
+                }
+            },
+            "response": {
+                "status": 201,
+                "headers": {
+                    "Content-Type": "application/json; charset=UTF-8"
+                },
+                "body": {
+                    "access_token": "some-access-toke"
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.access_token": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "header": {
+                        "Content-Type": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "provider returns a SIDAM user"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pactSpecification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": "3.5.24"
+        }
+    }
+}
